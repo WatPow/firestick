@@ -1,43 +1,28 @@
-Pour désactiver complètement la veille sur une Amazon Fire Stick à l'aide d'ADB, vous pouvez exécuter une série de commandes pour désactiver l'écran de veille et empêcher la mise en veille automatique. Voici les étapes :
 
-1. **Connectez-vous à votre Fire Stick via ADB** (Assurez-vous que le mode Débogage ADB est activé sur la Fire Stick dans les paramètres).
+1. **Lister les appareils connectés** :
+   Exécutez cette commande pour voir les appareils actuellement connectés à ADB :
 
-```bash
-adb connect <IP_de_votre_Fire_Stick>
-```
+   ```bash
+   .\adb.exe devices
+   ```
 
-Remplacez `<IP_de_votre_Fire_Stick>` par l'adresse IP réelle de votre Fire Stick.
+   Vous obtiendrez une liste des appareils, par exemple :
 
-2. **Désactiver le service de l'écran de veille** :
+   ```bash
+   List of devices attached
+   192.168.1.101:5555	device
+   emulator-5554	device
+   ```
 
-```bash
-adb shell settings put secure screensaver_enabled 0
-```
+2. **Connectez-vous à votre Fire Stick** :
+   Si vous voyez plusieurs appareils, vous devrez spécifier l'adresse IP ou l'ID de l'appareil que vous souhaitez utiliser. Par exemple, si votre Fire Stick est connecté via l'IP `192.168.1.101`, exécutez la commande suivante pour toutes les commandes ADB :
 
-Cela désactive l'écran de veille.
+   ```bash
+   .\adb.exe -s 192.168.1.101:5555 shell settings put secure screensaver_enabled 0
+   ```
 
-3. **Désactiver la mise en veille automatique** (timeout) :
+   Ou si vous utilisez un appareil USB, vous pouvez utiliser son ID, par exemple :
 
-```bash
-adb shell settings put system screen_off_timeout 2147483647
-```
-
-Cela met un très long délai avant que l'écran ne s'éteigne, rendant la mise en veille automatique presque impossible.
-
-4. **Vérifier si les modifications ont été prises en compte** :
-
-Vous pouvez vérifier que la valeur a bien été modifiée en exécutant la commande suivante :
-
-```bash
-adb shell settings get system screen_off_timeout
-```
-
-La valeur retournée devrait être `2147483647`, ce qui correspond à environ 24 jours.
-
-5. **Déconnexion d'ADB** :
-
-```bash
-adb disconnect
-```
-
-Ces commandes devraient empêcher la Fire Stick de passer en veille.
+   ```bash
+   .\adb.exe -s emulator-5554 shell settings put secure screensaver_enabled 0
+   ```
